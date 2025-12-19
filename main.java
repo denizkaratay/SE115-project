@@ -65,23 +65,64 @@ public class Main {
         return -1;
     }
 
-   
-    public static String mostProfitableCommodityInMonth(int month) {
-        return "DUMMY"; 
-    }
+public static String mostProfitableCommodityInMonth(int month) {
+    if (month < 0 || month >= MONTHS) return "INVALID_MONTH";
 
-    public static int totalProfitOnDay(int month, int day) {
-        return 1234;
+    int maxProfit = Integer.MIN_VALUE;
+    int bestComm = -1;
+    for (int c = 0; c < COMMS; c++) {
+        int total = 0;
+        for (int d = 0; d < DAYS; d++) {
+            total += data[month][d][c];
+        }
+        if (total > maxProfit) {
+            maxProfit = total;
+            bestComm = c;
+        }
     }
+    return commodities[bestComm] + " " + maxProfit;
+}
 
-    public static int commodityProfitInRange(String commodity, int from, int to) {
-        return 1234;
-    }
+public static int totalProfitOnDay(int month, int day) {
+    if (month < 0 || month >= MONTHS || day < 1 || day > DAYS) return -99999;
 
-    public static int bestDayOfMonth(int month) { 
-        return 1234; 
+    int total = 0;
+    for (int c = 0; c < COMMS; c++) {
+        total += data[month][day - 1][c];
     }
-    
+    return total;
+}
+
+public static int commodityProfitInRange(String commodity, int from, int to) {
+    int cIdx = getCommodityIndex(commodity);
+    if (cIdx == -1 || from < 1 || to > DAYS || from > to) return -99999;
+
+    int total = 0;
+    for (int m = 0; m < MONTHS; m++) {
+        for (int d = from - 1; d < to; d++) {
+            total += data[m][d][cIdx];
+        }
+    }
+    return total;
+}
+
+public static int bestDayOfMonth(int month) {
+    if (month < 0 || month >= MONTHS) return -1;
+
+    int maxProfit = Integer.MIN_VALUE;
+    int bestDay = -1;
+    for (int d = 0; d < DAYS; d++) {
+        int dailyTotal = 0;
+        for (int c = 0; c < COMMS; c++) {
+            dailyTotal += data[month][d][c];
+        }
+        if (dailyTotal > maxProfit) {
+            maxProfit = dailyTotal;
+            bestDay = d + 1;
+        }
+    }
+    return bestDay;
+}
     public static String bestMonthForCommodity(String comm) { 
         return "DUMMY"; 
     }
